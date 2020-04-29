@@ -1,0 +1,25 @@
+grafana:
+  build: ./grafana
+  container_name: grafana
+  ports:
+    - "3000:3000"
+  volumes:
+    - ./entrypoint.sh:/app/entrypoint.sh
+    - ./config/grafana.ini:/etc/grafana/grafana.ini
+    - ./config/dashboards:/var/lib/grafana/dashboards
+    - ./config/datasources:/etc/grafana/datasources
+    - ./config/plugins:/var/lib/grafana/plugins
+    - grafana_data:/var/lib/grafana
+  links:
+    - postgres
+  environment:
+    GF_USERS_DEFAULT_THEME: "light"
+
+postgres:
+  image: postgres:latest
+  container_name: postgres
+
+testdata:
+  build: ./testdata
+  links:
+    - postgres
